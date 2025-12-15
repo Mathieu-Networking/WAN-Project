@@ -67,8 +67,10 @@ Evidence of DHCP Relay (Branch PC pulling HQ IP):
 
 
 Evidence of OSPF Adjacency:
+
 <img width="600" height="112" alt="image" src="https://github.com/user-attachments/assets/d64a5952-d114-453f-b8ee-1ed1bd8a54fe" />
 
 
 Evidence of DMZ Segmentation (Ping Fail):
+
 <img width="414" height="130" alt="image" src="https://github.com/user-attachments/assets/3309aecd-2d20-4e55-a73a-c9d82cd91ac1" />
