@@ -37,3 +37,38 @@ interface vlan 50
 interface GigabitEthernet0/1
  no switchport
  ip address 10.1.255.2 255.255.255.252
+```
+B. Dynamic Routing (OSPF)
+I deployed OSPF Process 1 to share routes between the HQ and Branch sites. This allows the HQ Core switch to automatically learn about the Branch Engineering subnet, and vice-versa.
+router ospf 1
+```
+ router-id 2.2.2.2
+ network 10.1.0.0 0.0.255.255 area 0
+ network 10.1.255.0 0.0.0.3 area 0
+```
+C. Centralized DHCP (DHCP Relay)
+To centralize management, a single DHCP server at HQ services both the local LAN and the Remote Branch. I configured IP Helper Addresses on the Branch Gateway to forward broadcast requests across the WAN unicast to the HQ server.
+```
+! Branch Core Switch - Engineering VLAN
+interface vlan 30
+ ip helper-address 10.1.10.5
+```
+
+D. DMZ Security
+I placed the Public Web Server in a dedicated DMZ VLAN (50) and applied an Access Control List (ACL) to ensure the DMZ could not initiate connections to the internal Staff LAN.
+```
+ip access-list extended SECURE_DMZ
+ deny ip 10.1.50.0 0.0.0.255 10.1.10.0 0.0.0.255
+ permit ip any any
+```
+5. Verification
+Evidence of DHCP Relay (Branch PC pulling HQ IP):
+<img width="802" height="299" alt="image" src="https://github.com/user-attachments/assets/216ae17f-a01a-4dd6-aba3-45361ae1ef70" />
+
+
+Evidence of OSPF Adjacency:
+<img width="600" height="112" alt="image" src="https://github.com/user-attachments/assets/d64a5952-d114-453f-b8ee-1ed1bd8a54fe" />
+
+
+Evidence of DMZ Segmentation (Ping Fail):
+<img width="414" height="130" alt="image" src="https://github.com/user-attachments/assets/3309aecd-2d20-4e55-a73a-c9d82cd91ac1" />
